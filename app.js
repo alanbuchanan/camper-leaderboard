@@ -1,4 +1,9 @@
 const Header = () => {
+
+    const change = (event) => {
+
+    }
+
     return (
         <div className="col-xs-12">
             <div className="col-xs-8">
@@ -7,10 +12,12 @@ const Header = () => {
                 <h1>100</h1>
             </div>
             <div className="col-xs-4">
-                <select name="boobs" id="">
-                    <option value="">All time</option>
-                    <option value="">Past 30 days</option>
+                <select id="time-toggle" onChange={this.change} value={this.state.value}>
+                    <option value="past30days">Past 30 days</option>
+                    <option value="alltime">All time</option>
                 </select>
+
+                <h1>{$('#select-timeframe').val()}</h1>
             </div>
         </div>
     )
@@ -30,9 +37,7 @@ const Panels = (props) => {
                     </div>
                     <div className="info">
                         <h5>{e.username}</h5>
-
                         <p>Past 30 Days: {e.totalRecent}</p>
-
                         <p>All time: {e.total}</p>
                     </div>
                 </div>
@@ -50,13 +55,14 @@ const Panels = (props) => {
     )
 }
 
-const Loading = () => <div><h1>Loading...</h1></div>
+const Loading = () => <div className="loading"><h1>Loading...</h1></div>
 
 const Main = React.createClass({
 
     getInitialState() {
         return {
-            data: []
+            data: [],
+            value: 'recent'
         }
     },
 
@@ -64,20 +70,43 @@ const Main = React.createClass({
         this.getCampers()
     },
 
+    // Only pass 'recent' or 'alltime' in
     getCampers() {
-        const urlPastThirty = 'http://fcctop100.herokuapp.com/api/fccusers/recent/:sortColumnName';
-        const urlAllTime = 'http://fcctop100.herokuapp.com/api/fccusers/alltime/:sortColumnName.';
-        $.getJSON(urlPastThirty, dataFromSource => {
+        const url = `http://fcctop100.herokuapp.com/api/fccusers/${this.state.value}/:sortColumnName`;
+        $.getJSON(url, dataFromSource => {
             this.setState({data: dataFromSource});
+        })
+    },
+
+    changeFromSelect(event) {
+
+        this.setState({data: []})
+        this.setState({
+            value: event.target.value
+        }, () => {
+            this.getCampers()
         })
     },
 
     render(){
         const {data} = this.state;
+        const {value} = this.state;
         const loading = data.length === 0;
         return (
             <div>
-                <Header />
+                <div className="col-xs-12">
+                    <div className="col-xs-8">
+                        <h6>FreeCodeCamp</h6>
+
+                        <h1>100</h1>
+                    </div>
+                    <div className="col-xs-4">
+                        <select id="time-toggle" onChange={this.changeFromSelect} value={value}>
+                            <option value="recent">Past 30 days</option>
+                            <option value="alltime">All time</option>
+                        </select>
+                    </div>
+                </div>
                 {loading
                     ? <Loading />
                     : <Panels listOfCampers={data}/>
