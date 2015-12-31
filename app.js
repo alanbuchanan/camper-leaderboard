@@ -1,25 +1,7 @@
 const Header = () => {
 
-    const change = (event) => {
-
-    }
-
     return (
-        <div className="col-xs-12">
-            <div className="col-xs-8">
-                <h6>FreeCodeCamp</h6>
-
-                <h1>100</h1>
-            </div>
-            <div className="col-xs-4">
-                <select id="time-toggle" onChange={this.change} value={this.state.value}>
-                    <option value="past30days">Past 30 days</option>
-                    <option value="alltime">All time</option>
-                </select>
-
-                <h1>{$('#select-timeframe').val()}</h1>
-            </div>
-        </div>
+        <div></div>
     )
 }
 
@@ -29,6 +11,7 @@ const Panels = (props) => {
     const lines = listOfCampers.map((e, i) => {
         return (
             <li className="panel" key={i}>
+                <a href={`http://www.freecodecamp.com/${e.username}`}>
                 <div className="panel-inner">
                     <img className="img-responsive" src={e.img}/>
 
@@ -37,10 +20,15 @@ const Panels = (props) => {
                     </div>
                     <div className="info">
                         <h5>{e.username}</h5>
-                        <p>Past 30 Days: {e.totalRecent}</p>
-                        <p>All time: {e.total}</p>
+                        {listOfCampers[0].hasOwnProperty('totalRecent')
+                        // Adjust output depending on select
+                            ? <p>Past 30 Days: {e.totalRecent}</p>
+                            : <p>All time: {e.total}</p>
+                        }
+
                     </div>
                 </div>
+                </a>
             </li>
         )
     })
@@ -74,13 +62,19 @@ const Main = React.createClass({
     getCampers() {
         const url = `http://fcctop100.herokuapp.com/api/fccusers/${this.state.value}/:sortColumnName`;
         $.getJSON(url, dataFromSource => {
+
+            if(this.state.value === 'recent'){
+                dataFromSource.sort((a, b) => { return a.totalRecent > b.totalRecent ? -1 : a.totalRecent < b.totalRecent ? 1 : 0 });
+            } else { // alltime
+                dataFromSource.sort((a, b) => { return a.total > b.total ? -1 : a.total < b.total ? 1 : 0 });
+            }
             this.setState({data: dataFromSource});
         })
     },
 
     changeFromSelect(event) {
-
-        this.setState({data: []})
+        // UX: Re-initilising state.data triggers `Loading`. Without it, no loading.
+        //this.setState({data: []})
         this.setState({
             value: event.target.value
         }, () => {
@@ -94,14 +88,13 @@ const Main = React.createClass({
         const loading = data.length === 0;
         return (
             <div>
-                <div className="col-xs-12">
+                <div className="header col-xs-12">
                     <div className="col-xs-8">
-                        <h6>FreeCodeCamp</h6>
-
-                        <h1>100</h1>
+                        <h6><a href="http://www.freecodecamp.com/">FreeCodeCamp</a></h6>
+                        <h1>Top100</h1>
                     </div>
                     <div className="col-xs-4">
-                        <select id="time-toggle" onChange={this.changeFromSelect} value={value}>
+                        <select className="form-control" id="time-toggle" onChange={this.changeFromSelect} value={value}>
                             <option value="recent">Past 30 days</option>
                             <option value="alltime">All time</option>
                         </select>
@@ -110,6 +103,7 @@ const Main = React.createClass({
                 {loading
                     ? <Loading />
                     : <Panels listOfCampers={data}/>
+
                 }
             </div>
         )
