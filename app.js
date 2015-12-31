@@ -19,7 +19,6 @@ const Header = () => {
 const Panels = (props) => {
     const {listOfCampers} = props;
     console.log('list from panels:', listOfCampers);
-    const arr = [1, 2, 3, 4, 5, 6, 7, 8];
     const lines = listOfCampers.map((e, i) => {
         return (
             <li className="panel" key={i}>
