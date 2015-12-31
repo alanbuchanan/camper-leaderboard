@@ -11,15 +11,17 @@ select {
   margin-top: 10px; }
 
 .header {
-  padding: 20px; }
-  .header div h6 {
-    font-weight: 400;
-    letter-spacing: 1.5px; }
-    .header div h6 a {
-      text-decoration: none;
-      color: inherit; }
-  .header div h1 {
-    font-weight: 400; }
+  padding: 20px 0; }
+  .header div {
+    padding: 0; }
+    .header div h6 {
+      font-weight: 400;
+      letter-spacing: 1.5px; }
+      .header div h6 a {
+        text-decoration: none;
+        color: inherit; }
+    .header div h1 {
+      font-weight: 400; }
 
 ul {
   list-style-type: none;
@@ -45,6 +47,8 @@ h1, h2, h3, h4, h5, h6, p {
   display: inline-block; }
   .panel a {
     text-decoration: none; }
+  .panel .info {
+    padding: 10px; }
   .panel :hover img {
     -webkit-filter: opacity(0.9); }
   .panel :hover .info {
@@ -79,7 +83,8 @@ p {
   color: white; }
 
 select {
-  float: right; }
+  float: right;
+  margin-right: 8px; }
 
 @media screen and (min-width: 400px) {
   .panel {

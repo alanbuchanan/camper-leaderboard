@@ -1,5 +1,5 @@
 @import url(https://fonts.googleapis.com/css?family=Roboto+Slab:400,100);
-
+//TODO: fix linting here
 $primary-color: #FCF5B8;
 $bg-color: #B4CD93;
 $info-bg-color: dimgray;
@@ -24,9 +24,10 @@ select {
 }
 
 .header {
-  padding: 20px;
+  padding: 20px 0;
   //height: 100px;
   div {
+    padding: 0;
     h6 {
       font-weight: 400;
       letter-spacing: 1.5px;
@@ -74,6 +75,10 @@ h1, h2, h3, h4, h5, h6, p {
 
   a {
     text-decoration: none;
+  }
+
+  .info {
+    padding: 10px;
   }
 
   :hover {
@@ -125,7 +130,8 @@ p {
 }
 
 select {
-  float: right
+  float: right;
+  margin-right: 8px;
 }
 
 // GRID........................

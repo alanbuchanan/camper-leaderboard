@@ -111,3 +111,6 @@ const Main = React.createClass({
 })
 
 ReactDOM.render(<Main />, document.getElementById('root'))
+//TODO: ESLint
+//TODO: fix style problems that arise if image is too tall
+//TODO: use placeholder image if no image is present
