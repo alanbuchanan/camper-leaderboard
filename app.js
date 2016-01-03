@@ -7,11 +7,12 @@ const Header = () => {
 
 const Panels = (props) => {
     const {listOfCampers} = props;
+    console.log(props);
     console.log('list from panels:', listOfCampers);
     const lines = listOfCampers.map((e, i) => {
         return (
             <li className="panel" key={i}>
-                <a href={`http://www.freecodecamp.com/${e.username}`}>
+                <a href={`http://www.freecodecamp.com/${e.username}`} target="_blank">
                 <div className="panel-inner">
                     <img className="img-responsive" src={e.img}/>
 
@@ -20,10 +21,10 @@ const Panels = (props) => {
                     </div>
                     <div className="info">
                         <h5>{e.username}</h5>
-                        {listOfCampers[0].hasOwnProperty('totalRecent')
+                        {props.value === 'recent'
                         // Adjust output depending on select
-                            ? <p>Past 30 Days: {e.totalRecent}</p>
-                            : <p>All time: {e.total}</p>
+                            ? <p>Past 30 Days: {e.recent}</p>
+                            : <p>All time: {e.alltime}</p>
                         }
 
                     </div>
@@ -60,13 +61,13 @@ const Main = React.createClass({
 
     // Only pass 'recent' or 'alltime' in
     getCampers() {
-        const url = `http://fcctop100.herokuapp.com/api/fccusers/${this.state.value}/:sortColumnName`;
+        const url = `http://fcctop100.herokuapp.com/api/fccusers/top/${this.state.value}`;
         $.getJSON(url, dataFromSource => {
 
             if(this.state.value === 'recent'){
-                dataFromSource.sort((a, b) => { return a.totalRecent > b.totalRecent ? -1 : a.totalRecent < b.totalRecent ? 1 : 0 });
+                dataFromSource.sort((a, b) => { return a.recent > b.recent ? -1 : a.recent < b.recent ? 1 : 0 });
             } else { // alltime
-                dataFromSource.sort((a, b) => { return a.total > b.total ? -1 : a.total < b.total ? 1 : 0 });
+                dataFromSource.sort((a, b) => { return a.alltime > b.alltime ? -1 : a.alltime < b.alltime ? 1 : 0 });
             }
             this.setState({data: dataFromSource});
         })
@@ -74,7 +75,7 @@ const Main = React.createClass({
 
     changeFromSelect(event) {
         // UX: Re-initilising state.data triggers `Loading`. Without it, no loading.
-        //this.setState({data: []})
+        this.setState({data: []})
         this.setState({
             value: event.target.value
         }, () => {
@@ -87,6 +88,7 @@ const Main = React.createClass({
         const {value} = this.state;
         const loading = data.length === 0;
         return (
+            //TODO: refactor this into its own component (issue is with passing onChange for select)
             <div>
                 <div className="header col-xs-12">
                     <div className="col-xs-8">
@@ -102,7 +104,7 @@ const Main = React.createClass({
                 </div>
                 {loading
                     ? <Loading />
-                    : <Panels listOfCampers={data}/>
+                    : <Panels listOfCampers={data} value={value} />
 
                 }
             </div>
@@ -112,5 +114,6 @@ const Main = React.createClass({
 
 ReactDOM.render(<Main />, document.getElementById('root'))
 //TODO: ESLint
-//TODO: fix style problems that arise if image is too tall
+//TODO: fix style problems that arise if image is too tall (resize with background property?)
 //TODO: use placeholder image if no image is present
+//TODO: fix overflow of long usernames
