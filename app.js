@@ -23,8 +23,16 @@ const Panels = (props) => {
                         <h5>{e.username}</h5>
                         {props.value === 'recent'
                         // Adjust output depending on select
-                            ? <p>Past 30 Days: {e.recent}</p>
-                            : <p>All time: {e.alltime}</p>
+                        ?
+                        <div>
+                            <p>Past 30 Days: {e.recent}</p>
+                            <p>All time: {e.alltime}</p>
+                        </div>
+                        :
+                        <div>
+                            <p>All time: {e.alltime}</p>
+                            <p>Past 30 Days: {e.recent}</p>
+                        </div>
                         }
 
                     </div>
@@ -45,6 +53,12 @@ const Panels = (props) => {
 }
 
 const Loading = () => <div className="loading"><h1>Loading...</h1></div>
+
+const Footer = (props) => {
+    return (
+        <div className="footer">Made by <a href="http://www.github.com/alanbuchanan">alanbuchanan</a></div>
+    )
+}
 
 const Main = React.createClass({
 
@@ -102,10 +116,11 @@ const Main = React.createClass({
                         </select>
                     </div>
                 </div>
-                {loading
-                    ? <Loading />
-                    : <Panels listOfCampers={data} value={value} />
-
+                {loading ? <Loading /> :
+                <div>
+                    <Panels listOfCampers={data} value={value} />
+                    <Footer />
+                </div>
                 }
             </div>
         )
