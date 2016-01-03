@@ -1,5 +1,4 @@
 const Header = (props) => {
-
     return (
         <div className="header col-xs-12">
             <div className="col-xs-8">
@@ -122,6 +121,3 @@ const Main = React.createClass({
 })
 
 ReactDOM.render(<Main />, document.getElementById('root'))
-//TODO: fix style problems that arise if image is too tall (resize with background property?)
-//TODO: use placeholder image if no image is present
-//TODO: fix overflow of long usernames
