@@ -23,7 +23,6 @@ const Panels = (props) => {
                 <a href={`http://www.freecodecamp.com/${e.username}`} target="_blank">
                 <div className="panel-inner">
                     <img className="img-responsive" src={e.img}/>
-
                     <div className="number">
                         <h5>{i + 1}</h5>
                     </div>
